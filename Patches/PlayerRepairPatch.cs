@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using MassFixStructure.Configuration;
 using MassFixStructure.Core;
+using MassFixStructure.Network;
 using UnityEngine;
 
 namespace MassFixStructure.Patches
@@ -31,6 +32,12 @@ namespace MassFixStructure.Patches
         [HarmonyPrefix]
         public static bool Prefix(Player __instance, ItemDrop.ItemData toolItem, Piece repairPiece)
         {
+            // Dedicated servers have no local players swinging tools
+            if (ZNet.instance != null && ZNet.instance.IsDedicated())
+            {
+                return true;
+            }
+
             if (!ModConfig.ModEnabled.Value)
             {
                 return true;
@@ -50,7 +57,7 @@ namespace MassFixStructure.Patches
                 }
             }
 
-            Piece hoveringPiece = repairPiece != null ? repairPiece : __instance.GetHoveringPiece();
+            Piece hoveringPiece = __instance.GetHoveringPiece();
             if (hoveringPiece == null)
             {
                 return true;
@@ -102,19 +109,46 @@ namespace MassFixStructure.Patches
                 return true;
             }
 
+            // Calculate effective limits (respecting server limits if connected to a MassFix server)
+            int effectiveMaxRepairs = ModConfig.MaxRepairsPerSwing.Value;
+            float effectiveSearchRadius = ModConfig.SearchRadius.Value;
+            bool effectiveRequireWorkbench = ModConfig.RequireWorkbench.Value;
+
+            if (NetworkManager.ServerHasMod)
+            {
+                effectiveMaxRepairs = Math.Min(effectiveMaxRepairs, NetworkManager.ServerMaxRepairs);
+                effectiveSearchRadius = Math.Min(effectiveSearchRadius, NetworkManager.ServerSearchRadius);
+                effectiveRequireWorkbench = effectiveRequireWorkbench || NetworkManager.ServerRequireWorkbench;
+            }
+
             // Find all damaged pieces to repair
             List<WearNTear> piecesToRepair = StructureGraphTraverser.FindPiecesToRepair(
                 __instance,
                 originWnt,
                 ModConfig.Mode.Value,
-                ModConfig.SearchRadius.Value,
-                ModConfig.MaxRepairsPerSwing.Value,
+                effectiveSearchRadius,
+                effectiveMaxRepairs,
                 ModConfig.MaxSearchVisitedNodes.Value,
-                ModConfig.RequireWorkbench.Value
+                effectiveRequireWorkbench
             );
 
-            // Execute mass repair via Runner
-            if (MassRepairRunner.Instance != null)
+            if (piecesToRepair.Count == 0)
+            {
+                if (ModConfig.ShowHudNotification.Value)
+                {
+                    __instance.Message(MessageHud.MessageType.TopLeft, hoveringPiece.m_name + " $msg_doesnotneedrepair");
+                }
+                return false;
+            }
+
+            // Route execution:
+            // 1. If connected to a modded server (dedicated or remote host), send 1 atomic batched RPC!
+            // 2. If host / singleplayer or on a vanilla server, run local/staggered runner.
+            if (NetworkManager.ServerHasMod && ZNet.instance != null && !ZNet.instance.IsServer())
+            {
+                NetworkManager.SendBatchRepair(__instance, toolItem, hoveringPiece, piecesToRepair);
+            }
+            else if (MassRepairRunner.Instance != null)
             {
                 MassRepairRunner.Instance.ExecuteRepair(__instance, toolItem, hoveringPiece, piecesToRepair);
             }

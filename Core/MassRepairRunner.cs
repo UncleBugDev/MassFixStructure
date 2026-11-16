@@ -51,6 +51,10 @@ namespace MassFixStructure.Core
             Piece originPiece,
             List<WearNTear> piecesToRepair)
         {
+            if (ZNet.instance != null && ZNet.instance.IsDedicated())
+            {
+                return;
+            }
             if (piecesToRepair == null || piecesToRepair.Count == 0)
             {
                 if (ModConfig.ShowHudNotification.Value && player != null && originPiece != null)
@@ -252,6 +256,11 @@ namespace MassFixStructure.Core
 
         private void ShowCompletionHud(Player? player, int repairedCount, bool toolBrokenHalt)
         {
+            if (ZNet.instance != null && ZNet.instance.IsDedicated())
+            {
+                return;
+            }
+
             if (player == null || !ModConfig.ShowHudNotification.Value)
             {
                 return;
