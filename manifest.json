@@ -1,8 +1,8 @@
 {
   "name": "MassFixStructure",
   "version_number": "1.0.0",
-  "website_url": "https://github.com/UncleBugDev/MassFixStructure",
-  "description": "Smart mass repair mod for Valheim. Repairs entire connected buildings or structures in a radius with a single hammer strike, featuring zero-lag coroutine batching, sound throttling, and full ward safety.",
+  "website_url": "https://daymonmontage.github.io/daymon-site/",
+  "description": "Smart mass repair mod for Valheim created thanks to streamer DaymonMontage. Repairs entire connected buildings or structures in a radius with a single hammer strike, zero lag, sound throttling, and ward protection.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2202"
   ]

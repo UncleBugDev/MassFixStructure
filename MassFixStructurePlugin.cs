@@ -36,6 +36,7 @@ namespace MassFixStructure
             {
                 _harmony = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginGUID);
                 Log.LogInfo($"{PluginName} v{PluginVersion} successfully initialized and patched.");
+                Log.LogInfo("Special thanks to streamer DaymonMontage! Twitch: https://www.twitch.tv/daymonmontage | Hub: https://daymonmontage.github.io/daymon-site/");
             }
             catch (Exception ex)
             {

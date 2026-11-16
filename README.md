@@ -12,9 +12,19 @@
 <p align="center">
   <a href="https://github.com/UncleBugDev/MassFixStructure/releases"><img src="https://img.shields.io/github/v/release/UncleBugDev/MassFixStructure?style=for-the-badge&color=007ec6&logo=github" alt="GitHub Release" /></a>
   <a href="https://thunderstore.io/c/valheim/p/UncleBugDev/MassFixStructure/"><img src="https://img.shields.io/badge/Thunderstore-v1.0.0-orange?style=for-the-badge&logo=thunderstore" alt="Thunderstore" /></a>
+  <a href="https://www.twitch.tv/daymonmontage"><img src="https://img.shields.io/badge/Twitch-DaymonMontage-9146FF?style=for-the-badge&logo=twitch&logoColor=white" alt="DaymonMontage Twitch" /></a>
+  <a href="https://daymonmontage.github.io/daymon-site/"><img src="https://img.shields.io/badge/Daymon-Hub%20Site-00C7FF?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Daymon Hub Site" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License: MIT" /></a>
-  <img src="https://img.shields.io/badge/Valheim-PC%20%7C%20Steam-red?style=for-the-badge&logo=steam" alt="Platform" />
 </p>
+
+---
+
+### 💖 Credits & Special Thanks / Благодарности
+
+> **Этот мод был создан и вдохновлён благодаря стримеру [DaymonMontage](https://www.twitch.tv/daymonmontage)!**  
+> 
+> 📺 **Twitch канал:** [twitch.tv/daymonmontage](https://www.twitch.tv/daymonmontage) — залетайте на трансляции!  
+> 🌐 **Официальный сайт / хаб Daymon:** [daymonmontage.github.io/daymon-site](https://daymonmontage.github.io/daymon-site/) — все проекты, ссылки и ресурсы.
 
 ---
 
@@ -48,7 +58,7 @@ The config file is located at `BepInEx/config/com.unclebug.massfixstructure.cfg`
 | Section | Setting | Default | Description |
 |---|---|---|---|
 | **General** | `Enabled` | `true` | Master toggle for the mod. |
-| **General** | `RepairMode` | `Connected` | Modes: `Connected` (contiguous pieces only), `Radius` (sphere search), or `Hybrid` (both). |
+| **General** | `RepairMode` | `Connected` | Modes: `Connected` (contiguous pieces only), `ConnectedSameCategory` (same type), or `Radius` (sphere search). |
 | **Search** | `MaxPieces` | `500` | Maximum number of pieces repaired in a single pulse (safety limit). |
 | **Search** | `SearchRadius` | `25.0` | Search radius in meters (for Radius/Hybrid modes or BFS spatial bounds). |
 | **Performance** | `StaggerBatchesOverFrames` | `true` | Spreads repair RPCs across consecutive frames to prevent FPS drops. |
@@ -56,7 +66,7 @@ The config file is located at `BepInEx/config/com.unclebug.massfixstructure.cfg`
 | **Economy** | `DurabilityDrainRatio` | `1.0` | Multiplier for hammer durability consumption (`0.0` = free repair, `1.0` = vanilla 1:1 cost). |
 | **Economy** | `StaminaDrainRatio` | `0.0` | Stamina cost ratio per repaired piece (`0.0` = default zero extra drain). |
 | **Safety** | `RequireWardAccess` | `true` | Enforces player ward permission check before repairing. |
-| **Audio** | `AudioThrottleMode` | `Single` | Audio feedback: `Single` (1 clean sound), `Clustered` (occasional chimes), or `Vanilla` (all). |
+| **Audio** | `AudioThrottleMode` | `Single` | Audio feedback: `Single` (1 clean sound) or `Muted`. |
 
 ---
 
